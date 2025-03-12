@@ -65,12 +65,21 @@ function Menu() {
   return (
     <main className="menu">
       <h2>Our Menu</h2>
+
       {pizzas.length > 0 ? (
-        <ul className="pizzas">
-          {pizzas.map((pizza) => (
-            <Pizza pizzaObj={pizza} key={pizza.name} />
-          ))}
-        </ul>
+        <>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad, totam
+            corrupti quae deserunt pariatur, provident voluptatem eaque quas
+            repudiandae numquam possimus officia architecto modi itaque
+            reprehenderit inventore a similique alias!
+          </p>
+          <ul className="pizzas">
+            {pizzas.map((pizza) => (
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </>
       ) : (
         <p>We're still working on our menu. Please come back later :)</p>
       )}
@@ -79,14 +88,14 @@ function Menu() {
 }
 
 function Pizza({ pizzaObj }) {
-  if (pizzaObj.soldOut) return null;
+  // if (pizzaObj.soldOut) return null;
   return (
-    <li className="pizza">
+    <li className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
       <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
         <h3>{pizzaObj.name}</h3>
         <p>{pizzaObj.ingredients}</p>
-        <span>{pizzaObj.price}</span>
+        <span>{pizzaObj.soldOut ? "Sold Out" : pizzaObj.price}</span>
       </div>
     </li>
   );
