@@ -32,9 +32,20 @@ function Footer() {
   return (
     <footer>
       <div className="order">
-        {isOpen && (
+        {isOpen ? (
           <p>
-            We're open untill {closeHour}:00 PM. Come visit us or order online.
+            We're open untill {closeHour}:00 PM. Come visit us at open hours or
+            order online.
+          </p>
+        ) : (
+          <p
+            style={{
+              color: "red",
+              fontSize: "20px",
+              textTransform: "uppercase",
+              fontWeight: "bold",
+            }}>
+            We're happy to welcome you between {openHour}:00 and {closeHour}:00.
           </p>
         )}
         <button className="btn">Order</button>
@@ -44,33 +55,32 @@ function Footer() {
 }
 
 function Menu() {
+  const pizzas = pizzaData;
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <ul className="pizzas">
-        {pizzaData.length > 0 &&
-          pizzaData.map((pizza) => (
-            <Pizza
-              name={pizza.name}
-              ingredients={pizza.ingredients}
-              photoName={pizza.photoName}
-              price={pizza.price}
-              key={pizza.name}
-            />
+      {pizzas.length > 0 ? (
+        <ul className="pizzas">
+          {pizzas.map((pizza) => (
+            <Pizza pizzaObj={pizza} key={pizza.name} />
           ))}
-      </ul>
+        </ul>
+      ) : (
+        <p>We're still working on our menu. Please come back later :)</p>
+      )}
     </main>
   );
 }
 
-function Pizza(props) {
+function Pizza({ pizzaObj }) {
+  if (pizzaObj.soldOut) return null;
   return (
     <li className="pizza">
-      <img src={props.photoName} alt={props.name} />
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredients}</p>
-        <span>{props.price}</span>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        <span>{pizzaObj.price}</span>
       </div>
     </li>
   );
