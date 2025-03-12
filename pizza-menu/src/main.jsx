@@ -13,36 +13,6 @@ function App() {
   );
 }
 
-function Footer() {
-  const hour = new Date().getHours();
-  const openHour = 9;
-  const closeHour = 20;
-  const isOpen = hour >= openHour && hour <= closeHour;
-  console.log(isOpen);
-  // return React.createElement("footer", null, "We're currently open!");
-  return (
-    <footer>{new Date().toLocaleTimeString()} We're currently open!</footer>
-  );
-}
-
-function Menu() {
-  return (
-    <main className="menu">
-      <h2>Our Menu</h2>
-      {pizzaData.map((pizza) => {
-        return (
-          <Pizza
-            name={pizza.name}
-            ingredients={pizza.ingredients}
-            photoName={pizza.photoName}
-            price={pizza.price}
-          />
-        );
-      })}
-    </main>
-  );
-}
-
 function Header() {
   // const style = { color: "red", textTransform: "uppercase" };
   return (
@@ -52,16 +22,57 @@ function Header() {
   );
 }
 
+function Footer() {
+  const hour = new Date().getHours();
+  const openHour = 9;
+  const closeHour = 20;
+  const isOpen = hour >= openHour && hour <= closeHour;
+  console.log(isOpen);
+  // return React.createElement("footer", null, "We're currently open!");
+  return (
+    <footer>
+      <div className="order">
+        {isOpen && (
+          <p>
+            We're open untill {closeHour}:00 PM. Come visit us or order online.
+          </p>
+        )}
+        <button className="btn">Order</button>
+      </div>
+    </footer>
+  );
+}
+
+function Menu() {
+  return (
+    <main className="menu">
+      <h2>Our Menu</h2>
+      <ul className="pizzas">
+        {pizzaData.length > 0 &&
+          pizzaData.map((pizza) => (
+            <Pizza
+              name={pizza.name}
+              ingredients={pizza.ingredients}
+              photoName={pizza.photoName}
+              price={pizza.price}
+              key={pizza.name}
+            />
+          ))}
+      </ul>
+    </main>
+  );
+}
+
 function Pizza(props) {
   return (
-    <div className="pizza">
-      <img security="restricted" src={props.photoName} alt={props.name} />
+    <li className="pizza">
+      <img src={props.photoName} alt={props.name} />
       <div>
-        <h1>{props.name}</h1>
+        <h3>{props.name}</h3>
         <p>{props.ingredients}</p>
         <span>{props.price}</span>
       </div>
-    </div>
+    </li>
   );
 }
 
