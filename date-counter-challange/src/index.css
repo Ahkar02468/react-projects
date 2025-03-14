@@ -3,3 +3,9 @@
      padding: 10;
      box-sizing: border-box;
 }
+
+.app {
+     font-family: 'Poppins', sans-serif;
+     text-align: center;
+
+}
