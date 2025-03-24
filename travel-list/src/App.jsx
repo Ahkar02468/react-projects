@@ -1,7 +1,7 @@
 import { useState } from "react";
 const initialItems = [
   { id: 1, description: "Passports", quantity: 2, packed: false },
-  { id: 2, description: "Socks", quantity: 12, packed: true },
+  { id: 2, description: "Socks", quantity: 12, packed: false },
 ];
 
 function App() {
@@ -12,12 +12,27 @@ function App() {
   function handleDeleteItem(id) {
     setList((list) => list.filter((item) => item.id !== id));
   }
+  function handleToggleItem(id) {
+    setList((list) =>
+      list.map((item) =>
+        item.id === id ? { ...item, packed: !item.packed } : item
+      )
+    );
+  }
+  const handleReset = () => {
+    setList([]);
+  };
   return (
     <div className="app">
       <Logo />
       <Form onAddItems={handleAddItems} list={list} />
-      <PackingList list={list} onDeleteItem={handleDeleteItem} />
-      <Stats />
+      <PackingList
+        list={list}
+        onDeleteItem={handleDeleteItem}
+        onToggleItem={handleToggleItem}
+        onReset={handleReset}
+      />
+      <Stats list={list} />
     </div>
   );
 }
@@ -64,23 +79,51 @@ function Form({ onAddItems, list }) {
   );
 }
 
-function PackingList({ list, onDeleteItem }) {
-  console.log(list);
+function PackingList({ list, onDeleteItem, onToggleItem, onReset }) {
+  const [sortBy, setSortBy] = useState("input");
+  let sortedList;
+  if (sortBy === "input") sortedList = list;
+  if (sortBy === "description")
+    sortedList = [...list].sort((a, b) =>
+      a.description.localeCompare(b.description)
+    );
+  if (sortBy === "packed")
+    sortedList = [...list].sort((a, b) => a.packed - b.packed);
   return (
     <div className="list">
       <ul>
-        {list.length !== 0 &&
-          list.map((item) => (
-            <Item item={item} key={item.id} onDeleteItem={onDeleteItem} />
+        {sortedList.length !== 0 &&
+          sortedList.map((item) => (
+            <Item
+              item={item}
+              key={item.id}
+              onDeleteItem={onDeleteItem}
+              onToggleItem={onToggleItem}
+            />
           ))}
       </ul>
+
+      <div className="actions">
+        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+          <option value="input">Sort by input order</option>
+          <option value="description">Sort by description</option>
+          <option value="packed">Sort by packed status</option>
+        </select>
+        <button onClick={onReset}>reset</button>
+      </div>
     </div>
   );
 }
 
-function Item({ item, onDeleteItem }) {
+function Item({ item, onDeleteItem, onToggleItem }) {
   return (
     <li>
+      <input
+        type="checkbox"
+        value={item.packed}
+        onChange={() => onToggleItem(item.id)}
+      />
+      {console.log(item)}
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity} {item.description}
       </span>
@@ -89,10 +132,26 @@ function Item({ item, onDeleteItem }) {
   );
 }
 
-function Stats() {
+function Stats({ list }) {
+  if (!list.length)
+    return (
+      <footer className="stats">
+        No items on your list. Add some stuff 🥙🧐
+      </footer>
+    );
+  const noOfpacked = list.filter((item) => item.packed).length;
+  const percentage = Math.round((noOfpacked / list.length) * 100);
   return (
     <footer className="stats">
-      <em>💼 You have X items on your list, and you already packed X (X%)</em>
+      <em>
+        💼
+        {percentage === 100
+          ? "Gear up Ready to go ✈️"
+          : `You have ${list.length} items on your list, and you already packed
+        ${noOfpacked} ${noOfpacked > 1 ? "items" : "item"} (${Math.round(
+              percentage
+            )} %)`}
+      </em>
     </footer>
   );
 }
