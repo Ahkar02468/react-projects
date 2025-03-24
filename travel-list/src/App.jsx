@@ -20,7 +20,8 @@ function App() {
     );
   }
   const handleReset = () => {
-    setList([]);
+    const confirmReset = window.confirm("Are you sure you want to reset?");
+    if (confirmReset) setList([]);
   };
   return (
     <div className="app">
@@ -47,7 +48,6 @@ function Form({ onAddItems, list }) {
   function handleSubmit(e) {
     e.preventDefault();
     if (!description) return;
-    // console.log(e);
     const newItem = {
       id: list.length + 1,
       description,
