@@ -22,15 +22,15 @@ export default function App() {
       {isOpen && (
         <div className="steps">
           <div className="numbers">
-            <div className={step === 1 ? "active" : ""}>1</div>
-            <div className={step === 2 ? "active" : ""}>2</div>
-            <div className={step === 3 ? "active" : ""}>3</div>
+            <div className={step > 0 ? "active" : ""}>1</div>
+            <div className={step > 1 ? "active" : ""}>2</div>
+            <div className={step > 2 ? "active" : ""}>3</div>
           </div>
           <p className="message">
             Step - {step}: {messages[step - 1]}
           </p>
           <div className="buttons">
-            <button
+            {/* <button
               onClick={preButton}
               style={{ backgroundColor: "#7950f2", color: "#fff" }}>
               Previous
@@ -39,10 +39,26 @@ export default function App() {
               onClick={nexButton}
               style={{ backgroundColor: "#7950f2", color: "#fff" }}>
               Next
-            </button>
+            </button> */}
+            <Button onClick={preButton} bgColor="#7950f2" textColor="#fff">
+              <span>👈</span>Previous
+            </Button>
+            <Button onClick={nexButton} bgColor="#7950f2" textColor="#fff">
+              Next<span>👉</span>
+            </Button>
           </div>
         </div>
       )}
     </div>
+  );
+}
+
+function Button({ onClick, bgColor, textColor, children }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{ backgroundColor: bgColor, color: textColor }}>
+      {children}
+    </button>
   );
 }
