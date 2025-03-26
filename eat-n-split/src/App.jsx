@@ -1,5 +1,8 @@
 import { useState } from "react";
 import FriendList from "./componenets/FriendList";
+import FormAddFriend from "./componenets/FormAddFriend";
+import FormSplitBill from "./componenets/FormSplitBill";
+import Button from "./componenets/Button";
 
 const initialFriends = [
   {
@@ -23,12 +26,19 @@ const initialFriends = [
 ];
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [showForm, setShowForm] = useState(false);
 
   return (
     <div className="app">
       <div className="sidebar">
         <FriendList friends={initialFriends} />
+        {showForm && <FormAddFriend />}
+        <Button onClick={() => setShowForm((show) => !show)}>
+          {showForm ? "Close" : "Add Friend"}
+        </Button>
+      </div>
+      <div>
+        <FormSplitBill />
       </div>
     </div>
   );
