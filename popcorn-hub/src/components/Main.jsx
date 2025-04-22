@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ShowStar from "./ShowStar";
 const KEY = "7256e237";
 const average = (arr) =>
@@ -66,6 +66,10 @@ function MovieDetails({
   const [movie, setMovie] = useState({});
   const [detailLoading, setDetailLoading] = useState(false);
   const [userRating, setUserRating] = useState("");
+  const countRef = useRef([]);
+  useEffect(() => {
+    if (userRating) countRef.current.push(userRating);
+  }, [userRating]);
   // console.log(userRating);
   const {
     Actors: actors,
@@ -90,6 +94,7 @@ function MovieDetails({
       runtime: Number(runtime.split(" ").at(0)),
       imdbRating: Number(imdbRating),
       userRating,
+      countHistory: countRef.current,
     };
     onAddWatch(newWatchedMovie);
     onCloseMovieDetails();
