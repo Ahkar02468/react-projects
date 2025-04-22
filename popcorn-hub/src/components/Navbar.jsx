@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 const Navbar = ({ children, query, setQuery }) => {
   return (
     <nav className="nav-bar">
@@ -16,6 +18,10 @@ function Logo() {
   );
 }
 function Search({ query = "John Wick", setQuery }) {
+  useEffect(() => {
+    const el = document.querySelector(".search");
+    el.focus();
+  }, []);
   return (
     <input
       className="search"
