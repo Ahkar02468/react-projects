@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import { useKey } from "./useKey";
 
 const Navbar = ({ children, query, setQuery }) => {
   return (
@@ -19,17 +20,8 @@ function Logo() {
 }
 function Search({ query = "John Wick", setQuery }) {
   const inputEl = useRef(null);
-  useEffect(() => {
-    function handleEnterKeyPress(e) {
-      if (document.activeElement === inputEl.current) return;
-      if (e.key === "Enter") {
-        inputEl.current.focus();
-        setQuery("");
-      }
-    }
-    document.addEventListener("keydown", handleEnterKeyPress);
-    // return () => document.removeEventListener("keydown", handleEnterKeyPress);
-  }, [setQuery]);
+  useKey(inputEl, "Enter", setQuery);
+
   // useEffect(() => {
   //   const el = document.querySelector(".search");
   //   el.focus();
