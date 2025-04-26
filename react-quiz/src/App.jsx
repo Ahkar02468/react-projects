@@ -4,6 +4,7 @@ import Main from "./components/Main.jsx";
 import Loader from "./components/Loader.jsx";
 import Error from "./components/Error.jsx";
 import StartScreen from "./components/StartScreen.jsx";
+import Question from "./components/Question.jsx";
 
 const initialState = {
   questions: [],
@@ -22,6 +23,11 @@ function reducer(state, action) {
       return {
         ...state,
         status: "error",
+      };
+    case "start":
+      return {
+        ...state,
+        status: "active",
       };
     default:
       throw new Error("Action unknown");
@@ -42,7 +48,10 @@ function App() {
       <Main>
         {status === "loading" && <Loader />}
         {status === "error" && <Error />}
-        {status === "ready" && <StartScreen noOfQuestions={noOfQuestions} />}
+        {status === "ready" && (
+          <StartScreen noOfQuestions={noOfQuestions} dispatch={dispatch} />
+        )}
+        {status === "active" && <Question />}
       </Main>
     </div>
   );
