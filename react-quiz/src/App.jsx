@@ -37,6 +37,14 @@ function reducer(state, action) {
         ...state,
         status: "active",
       };
+    case "reStart":
+      return {
+        ...state,
+        status: "ready",
+        index: 0,
+        answer: null,
+        points: 0,
+      };
     case "newAnswer":
       return {
         ...state,
@@ -112,6 +120,7 @@ function App() {
         )}
         {status === "finished" && (
           <FinishedScreen
+            dispatch={dispatch}
             points={points}
             maxPossiblePoints={maxPossiblePoints}
             highscore={highscore}
