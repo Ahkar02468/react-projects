@@ -1,11 +1,18 @@
-export default function NextQuestion({ dispatch }) {
+export default function NextQuestion({
+  dispatch,
+  answer,
+  index,
+  noOfQuestions,
+}) {
+  if (answer === null) return null;
+  const isLastQuestion = index === noOfQuestions - 1;
+  const actionType = isLastQuestion ? "finish" : "nextQuestion";
+  const buttonText = isLastQuestion ? "Finish" : "Next";
   return (
-    <div>
-      <button
-        className="btn btn-ui"
-        onClick={() => dispatch({ type: "nextQuestion" })}>
-        Next
-      </button>
-    </div>
+    <button
+      className="btn btn-ui"
+      onClick={() => dispatch({ type: actionType })}>
+      {buttonText}
+    </button>
   );
 }
