@@ -8,6 +8,7 @@ import Question from "./components/Question.jsx";
 import NextQuestion from "./components/NextQuestion.jsx";
 import Progress from "./components/Progress.jsx";
 import FinishedScreen from "./components/FinishedScreen.jsx";
+import Timer from "./components/Timer.jsx";
 
 const initialState = {
   questions: [],
@@ -17,6 +18,7 @@ const initialState = {
   answer: null,
   points: 0,
   highscore: 0,
+  secondRemaining: 0,
 };
 function reducer(state, action) {
   const question = state.questions[state.index];
@@ -36,6 +38,7 @@ function reducer(state, action) {
       return {
         ...state,
         status: "active",
+        secondRemaining: state.questions.length * 60,
       };
     case "reStart":
       return {
@@ -60,6 +63,12 @@ function reducer(state, action) {
         index: state.index + 1,
         answer: null,
       };
+    case "tick":
+      return {
+        ...state,
+        secondRemaining: state.secondRemaining - 1,
+        status: state.secondRemaining === 0 ? "finished" : state.status,
+      };
     case "finish":
       return {
         ...state,
@@ -73,8 +82,10 @@ function reducer(state, action) {
   }
 }
 function App() {
-  const [{ questions, status, index, answer, points, highscore }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { questions, status, index, answer, points, highscore, secondRemaining },
+    dispatch,
+  ] = useReducer(reducer, initialState);
   const noOfQuestions = questions.length;
   const maxPossiblePoints = questions.reduce((prev, curr) => {
     return prev + curr.points;
@@ -108,6 +119,7 @@ function App() {
               dispatch={dispatch}
               answer={answer}
             />
+            <Timer dispatch={dispatch} secondRemaining={secondRemaining} />
           </>
         )}
         {answer !== null && (
